@@ -5,39 +5,31 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 products_db = myclient["products"]
 order_management_db = myclient["order_management"]
 
-products = {
-    100: {"name":"Tea House","price":320,"image": "../static/images/tea-house.png", "description": "barley tea and malayco cake ice cream inspired by dim sum houses of Hong Kong, best for the adventurous"},
-    200: {"name":"Vietnamese Coffee","price":320, "image": "../static/images/vietnamese-coffee.png", "description": "boldly flavored ice cream crafted from Robusta beans and mixed with milky fudge chunks, ideal for coffee lovers"},
-    300: {"name":"White Rabbit","price":320, "image": "../static/images/white-rabbit.png", "description": "super creamy ice cream made from white rabbit candy, perfect for the nostalgic sweet tooth"},
-}
+# products = {
+#     100: {"name":"Tea House","price":320,"image": "../static/images/tea-house.png", "description": "barley tea and malayco cake ice cream inspired by dim sum houses of Hong Kong, best for the adventurous"},
+#     200: {"name":"Vietnamese Coffee","price":320, "image": "../static/images/vietnamese-coffee.png", "description": "boldly flavored ice cream crafted from Robusta beans and mixed with milky fudge chunks, ideal for coffee lovers"},
+#     300: {"name":"White Rabbit","price":320, "image": "../static/images/white-rabbit.png", "description": "super creamy ice cream made from white rabbit candy, perfect for the nostalgic sweet tooth"},
+# }
 
-branches = {
-    1: {"name":"Katipunan","phonenumber":"09179990000"},
-    2: {"name":"Tomas Morato","phonenumber":"09179990001"},
-    3: {"name":"Eastwood","phonenumber":"09179990002"},
-    4: {"name":"Tiendesitas","phonenumber":"09179990003"},
-    5: {"name":"Arcovia","phonenumber":"09179990004"},
-}
-
-users = {
-    "harveyjaysison@example.com":{"password":"12345678",
-                         "first_name":"Harvey",
-                         "last_name":"Sison"}
-}
+# users = {
+#     "harveyjaysison@example.com":{"password":"12345678",
+#                          "first_name":"Harvey",
+#                          "last_name":"Sison"}
+# }
 
 ##  Products
-def get_product(code):
-    return products[code]
+# def get_product(code):
+#     return products[code]
 
-def get_products():
-    product_list = []
+# def get_products():
+#     product_list = []
 
-    for i,v in products.items():
-        product = v
-        product.setdefault("code",i)
-        product_list.append(product)
+#     for i,v in products.items():
+#         product = v
+#         product.setdefault("code",i)
+#         product_list.append(product)
 
-    return product_list
+#     return product_list
     
 # def get_products():
 #     product_list = []
@@ -58,49 +50,34 @@ def get_products():
 #     return product
 
 ## Production
-# def get_product(code):
-#     products_coll = products_db["products"]
+def get_product(code):
+    products_coll = products_db["products"]
 
-#     product = products_coll.find_one({"code":code},{"_id":0})
+    product = products_coll.find_one({"code":code},{"_id":0})
 
-#     return product
+    return product
 
-# def get_products():
-#     product_list = []
+def get_products():
+    product_list = []
 
-#     products_coll = products_db["products"]
+    products_coll = products_db["products"]
 
-#     for p in products_coll.find({},{"_id":0}):
-#         product_list.append(p)
+    for p in products_coll.find({},{"_id":0}):
+        product_list.append(p)
 
-#     return product_list
-
-
-## Branches
-def get_branch(code):
-    return branches[code]
-
-def get_branches():
-    branch_list = []
-
-    for i,v in branches.items():
-        branch = v
-        branch.setdefault("code",i)
-        branch_list.append(branch)
-
-    return branch_list
+    return product_list
 
 ## Users
-# def get_user(username):
-#     customers_coll = order_management_db['customers']
-#     user=customers_coll.find_one({"username":username})
-#     return user
-
 def get_user(username):
-    try:
-       return users[username]
-    except KeyError:
-       return None
+    customers_coll = order_management_db['customers']
+    user=customers_coll.find_one({"username":username})
+    return user
+
+# def get_user(username):
+#     try:
+#        return users[username]
+#     except KeyError:
+#        return None
 
 
 ## Orders
