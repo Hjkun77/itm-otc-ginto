@@ -1,0 +1,193 @@
+{% include "header.html" %}
+<section>
+	<div class="container py-5">
+		<div class="page-title">Your Checkout</div>
+		<h2 class="checkout-title">Billing Details</h2>
+		<form action="/order" method="POST" class="checkout-form">
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Name *</label>
+				<input type="text" name="firstName" placeholder="First Name" />
+				<input type="text" name="lastName" placeholder="Last Name" />
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="address">Address *</label>
+				<div style="width: 100%">
+					<input
+						type="text"
+						name="address1"
+						placeholder="House Number and Street Name"
+						class="mb-3"
+						style="width: 100%"
+					/>
+					<input
+						type="text"
+						name="address2"
+						placeholder="Subdivision / Apartment / Building (Optional)"
+					/>
+				</div>
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Town / City *</label>
+				<input type="text" name="city" />
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">State / Province *</label>
+				<input type="text" name="state" />
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Postcode / ZIP *</label>
+				<input type="text" name="zip" />
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Phone *</label>
+				<input type="tel" name="phone" />
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Email address *</label>
+				<input type="email" name="email" />
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">IG or FB Link *</label>
+				<input
+					type="text"
+					name="socmed"
+					placeholder="www.facebook.com/sampleusername"
+				/>
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Order Notes *</label>
+				<input
+					type="text"
+					name="notes"
+					placeholder="Nearest Landmark / Notes for the Courier"
+				/>
+			</div>
+			<div
+				class="
+					form-group
+					d-flex
+					justify-content-between
+					align-items-center
+					mb-3
+				"
+			>
+				<label for="name">Message to Recipient</label>
+				<textarea name="message" rows="4" cols="50">
+Please keep it under 100 words</textarea
+				>
+			</div>
+			<div>
+				<h2 class="checkout-title">Your Order</h2>
+				<div
+					class="
+						form-group
+						d-flex
+						justify-content-between
+						align-items-center
+						mb-3
+					"
+				>
+					<label for="address">Products</label>
+					<div class="border-bottom py-5" style="width: 100%">
+						{% for item in session["cart"].values() %}
+						<div
+							class="
+								d-flex
+								justify-content-between
+								align-items-center
+								cart-item-wrapper
+								my-3
+							"
+						>
+							<img src="{{ item["image"] }}" alt="{{ item["name"] }}" />
+							<div class="cart-details">
+								<h4>{{ item["name"] }}</h4>
+								<!-- <h6>Quantiy: {{ item["qty"] }}</h6> -->
+								<h5>PHP {{ item["price"] }}</h5>
+							</div>
+							<p class="cart-details-quantity">x 1</p>
+							<p class="cart-details-price">PHP {{ item["price"] }}</p>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="mt-5">
+				<button class="cta-button" style="margin-left: 0">Place Order</button>
+			</div>
+		</form>
+	</div>
+</section>
+{% include "footer.html" %}
