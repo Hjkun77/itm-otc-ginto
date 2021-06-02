@@ -6,7 +6,7 @@ def create_order_from_cart():
     order = {}
     order.setdefault("username",session["user"]["username"])
     order.setdefault("orderdate",datetime.utcnow())
-    order.setdefault("order", session["order"])
+    # order.setdefault("order", session["order"])
     order_details = []
     cart = session["cart"]
     for key, value in cart.items():
