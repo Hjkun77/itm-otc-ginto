@@ -14,10 +14,6 @@ app.secret_key = b's@g@d@c0ff33!'
 logging.basicConfig(level=logging.DEBUG)
 app.logger.setLevel(logging.INFO)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template('login.html')
-
 @app.route('/auth', methods = ['GET', 'POST'])
 def auth():
     username = request.form.get('username')
@@ -204,7 +200,7 @@ def passwordauth():
     app.logger.info('%s', is_successful)
     if(is_successful):
         db.change_pass(session['user']['username'], new)
-        return redirect('/login')
+        return redirect('/')
     else:
         if not is_correct_old:
             flash("Old password is not correct.")
