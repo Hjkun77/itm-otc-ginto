@@ -178,17 +178,6 @@ def ordercomplete():
     return render_template('ordercomplete.html')
 
 
-@app.route('/orderhistory')
-def orderhistory():
-    orders = db.get_orders()
-    order_list = []
-    for item in orders:
-        for order in item['details']:
-            order_list.append(order)
-
-
-    return render_template('orderhistory.html', order_list=order_list)
-
 @app.route('/api/products',methods=['GET'])
 def api_get_products():
     resp = make_response( dumps(db.get_products()) )
@@ -204,7 +193,7 @@ def api_get_product(code):
 @app.route('/password')
 def changepassword():
     return render_template('changepassword.html')
-    
+
 @app.route('/password-auth', methods = ['POST'])
 def passwordauth():
     old = request.form.get('old-password')
@@ -223,18 +212,3 @@ def passwordauth():
             flash("Passwords do not match.")
 
         return redirect('/password')
-
-def change_password_verification(old, new, confirm):
-    old_is_correct = False
-    new_is_same = False
-    change_is_valid = False
-    temp_user = db.get_user(session["user"]["username"])
-    if(old == temp_user["password"]):
-        old_is_correct = True
-    if(new == confirm):
-        new_is_same = True
-
-    if old_is_correct and new_is_same:
-        change_is_valid = True
-
-    return old_is_correct, new_is_same, change_is_valid
