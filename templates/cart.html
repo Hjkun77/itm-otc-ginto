@@ -21,7 +21,7 @@
 					<h6>Quantiy: {{ item["qty"] }}</h6>
 					<h5>PHP {{ item["price"] }}</h5>
 				</div>
-				<div>
+				<!-- <div>
 					<span class="minus">-</span>
 					<input
 						type="number"
@@ -32,7 +32,7 @@
 						value="{{ item['qty'] }}"
 					/>
 					<span class="plus">+</span>
-				</div>
+				</div> -->
 				<p class="cart-details-price">PHP {{ item["price"] }}</p>
 				<div class="cart-details-remove">
 					<a href="/deleteitem?code={{ item["code"] }}">
