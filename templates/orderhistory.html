@@ -1,0 +1,16 @@
+{% include "header.html" %}
+<section style="min-height: 100vh;" class="container pt-5">
+    <h1 class="page-title text-center">Order History</h1>
+    {% if order_list is defined %}
+    <table>
+        <tr><th>Name</th><th>Quantity</th><th>Subtotal</th></tr>
+        {% for order in order_list %}
+            <tr><td>{{ order["name"] }}</a></td><td>{{ order["qty"] }}</td><td>{{ order["subtotal"] }}</td></tr>
+        {% endfor %}
+    </table>
+    
+    {% else %}
+    <div>No orders have been made yet.</div>
+    {% endif %}
+</section>
+{% include "footer.html" %}

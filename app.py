@@ -1,9 +1,5 @@
-from flask import Flask,redirect
-from flask import render_template
-from flask import request
-from flask import session
-# from bson.json_util import loads, dumps
-from flask import make_response
+from flask import Flask, render_template, request, redirect, session, flash, make_response
+from bson.json_util import loads, dumps
 import database as db
 import authentication
 import ordermanagement as om
@@ -33,6 +29,7 @@ def auth():
         session["user"] = user
         return redirect('/products')
     else:
+        flash("Invalid username or password. Please try again.")
         return redirect('/')
 
 @app.route('/logout')
@@ -97,13 +94,45 @@ def addtocart():
     session["cart"]=cart
     return redirect('/cart')
 
+@app.route('/updatecart', methods=['POST'])
+def updatecart():
+    code = request.form.getlist("code")
+    qty = request.form.getlist("qty")
+
+    cart = session["cart"]
+
+    for item in range(len(code)):
+        product = db.get_product(int(code[item]))
+        cart[code[item]]["qty"] = int(qty[item])
+        cart[code[item]]["subtotal"] = int(qty[item]) * int(product["price"])
+
+    session["cart"] = cart
+    
+    return redirect('/cart')
+
+@app.route('/deleteitem')
+def deleteitem():
+    code = request.args.get('code', '')
+    cart = session["cart"]
+    cart.pop(code, None)
+    session["cart"]=cart
+
+    return redirect('/cart')
+
+@app.route('/deleteall')
+def deleteall():
+    session.pop('cart', None)
+    return redirect('/cart')
+
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
 
 @app.route('/checkout')
 def checkout():
-     return render_template('checkout.html')
+    om.create_order_from_cart()
+    session.pop("cart",None)
+    return render_template('checkout.html')
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
@@ -148,6 +177,18 @@ def order():
 def ordercomplete():
     return render_template('ordercomplete.html')
 
+
+@app.route('/orderhistory')
+def orderhistory():
+    orders = db.get_orders()
+    order_list = []
+    for item in orders:
+        for order in item['details']:
+            order_list.append(order)
+
+
+    return render_template('orderhistory.html', order_list=order_list)
+
 @app.route('/api/products',methods=['GET'])
 def api_get_products():
     resp = make_response( dumps(db.get_products()) )
@@ -159,3 +200,41 @@ def api_get_product(code):
     resp = make_response(dumps(db.get_product(code)))
     resp.mimetype = 'application/json'
     return resp
+
+@app.route('/password')
+def changepassword():
+    return render_template('changepassword.html')
+    
+@app.route('/password-auth', methods = ['POST'])
+def passwordauth():
+    old = request.form.get('old-password')
+    new = request.form.get('new-password')
+    confirm = request.form.get('confirm-password')
+
+    is_successful, is_correct_old, is_same_new = authentication.change_password_verification(old, new, confirm)
+    app.logger.info('%s', is_successful)
+    if(is_successful):
+        db.change_pass(session['user']['username'], new)
+        return redirect('/login')
+    else:
+        if not is_correct_old:
+            flash("Old password is not correct.")
+        if not is_same_new:
+            flash("Passwords do not match.")
+
+        return redirect('/password')
+
+def change_password_verification(old, new, confirm):
+    old_is_correct = False
+    new_is_same = False
+    change_is_valid = False
+    temp_user = db.get_user(session["user"]["username"])
+    if(old == temp_user["password"]):
+        old_is_correct = True
+    if(new == confirm):
+        new_is_same = True
+
+    if old_is_correct and new_is_same:
+        change_is_valid = True
+
+    return old_is_correct, new_is_same, change_is_valid
