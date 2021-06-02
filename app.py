@@ -130,7 +130,7 @@ def checkout():
     session.pop("cart",None)
     return render_template('checkout.html')
 
-@app.route('/order', methods=['GET', 'POST'])
+@app.route('/order', methods=['POST'])
 def order():
     order=dict()
 

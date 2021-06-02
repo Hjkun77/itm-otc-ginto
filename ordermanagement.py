@@ -1,5 +1,5 @@
 import database as db
-from flask import session
+from flask.globals import session
 from datetime import datetime
 
 def create_order_from_cart():
