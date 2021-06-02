@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, flash, make_response
-from bson.json_util import loads, dumps
+from flask import Flask, render_template, request, redirect, session, flash
 import database as db
 import authentication
-import ordermanagement as om
 import logging
+import ordermanagement as om
+from bson.json_util import loads, dumps
+from flask import make_response
 
 app = Flask(__name__)
 
