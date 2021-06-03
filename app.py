@@ -128,7 +128,6 @@ def cart():
 @app.route('/checkout')
 def checkout():
     om.create_order_from_cart()
-    session.pop("cart",None)
     return render_template('checkout.html')
 
 @app.route('/order', methods=['POST'])
